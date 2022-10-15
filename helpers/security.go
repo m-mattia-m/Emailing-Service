@@ -2,7 +2,9 @@ package helpers
 
 import (
 	"crypto/rand"
+	"emailing-service/models"
 	"encoding/base64"
+	"errors"
 	"math/big"
 )
 
@@ -33,4 +35,66 @@ func GenerateRandomBytes(n int) ([]byte, error) {
 	}
 
 	return b, nil
+}
+
+func CheckEmailAttribute(email models.Email) error {
+	if email.FromName == "" {
+		return errors.New("an attribute is empty")
+	}
+	if email.FromEmail == "" {
+		return errors.New("an attribute is empty")
+	}
+	if email.ToEmail == "" {
+		return errors.New("an attribute is empty")
+	}
+	if email.Subject == "" {
+		return errors.New("an attribute is empty")
+	}
+	if email.Message == "" {
+		return errors.New("an attribute is empty")
+	}
+	if email.ContentType == "" {
+		return errors.New("an attribute is empty")
+	}
+	if email.Host == "" {
+		return errors.New("an attribute is empty")
+	}
+	if email.Port == "" {
+		return errors.New("an attribute is empty")
+	}
+	if email.Username == "" {
+		return errors.New("an attribute is empty")
+	}
+	if email.Password == "" {
+		return errors.New("an attribute is empty")
+	}
+	return nil
+}
+
+func CheckRegisterAttribute(register models.SenderRequest) error {
+	if register.Name == "" {
+		return errors.New("an attribute is empty")
+	}
+	if register.Keyword == "" {
+		return errors.New("an attribute is empty")
+	}
+	if register.Email == "" {
+		return errors.New("an attribute is empty")
+	}
+	if register.NotificationEmail == "" {
+		return errors.New("an attribute is empty")
+	}
+	if register.SmtpUrl == "" {
+		return errors.New("an attribute is empty")
+	}
+	if register.SmtpPort == "" {
+		return errors.New("an attribute is empty")
+	}
+	if register.SmtpUsername == "" {
+		return errors.New("an attribute is empty")
+	}
+	if register.SmtpPassword == "" {
+		return errors.New("an attribute is empty")
+	}
+	return nil
 }

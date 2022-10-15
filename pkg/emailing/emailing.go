@@ -2,6 +2,7 @@ package emailing
 
 import (
 	"crypto/tls"
+	"emailing-service/helpers"
 	"emailing-service/models"
 	"fmt"
 	"log"
@@ -10,22 +11,8 @@ import (
 	"net/smtp"
 )
 
-type email struct {
-	FromName    string
-	FromEmail   string
-	ToEmail     string
-	Subject     string
-	Message     string
-	ContentType string
-	Host        string
-	Port        string
-	Username    string
-	Password    string
-	SSL         bool
-}
-
-func Mail(sender models.Sender, receiver models.ReceiverRequst) {
-	email := email{
+func Mail(sender models.Sender, receiver models.ReceiverRequst) error {
+	email := models.Email{
 		FromName:    sender.Name,
 		FromEmail:   sender.Email,
 		ToEmail:     receiver.Email,
@@ -42,11 +29,21 @@ func Mail(sender models.Sender, receiver models.ReceiverRequst) {
 	notificationEmail := email
 	notificationEmail.ToEmail = sender.NotificationEmail
 
+	err := helpers.CheckEmailAttribute(email)
+	if err != nil {
+		return err
+	}
+	err = helpers.CheckEmailAttribute(notificationEmail)
+	if err != nil {
+		return err
+	}
+
 	sendMail(email)
 	sendMail(notificationEmail)
+	return nil
 }
 
-func sendMail(email email) {
+func sendMail(email models.Email) {
 	from := mail.Address{Name: email.FromName, Address: email.FromEmail}
 	to := mail.Address{Name: "", Address: email.ToEmail}
 	subject := email.Subject
@@ -76,41 +73,49 @@ func sendMail(email email) {
 	conn, err := tls.Dial("tcp", servername, tlsconfig)
 	if err != nil {
 		log.Println("[MAIL]: Cannot connect to the mail server \t\t -> Error: " + err.Error())
+		return
 	}
 
 	c, err := smtp.NewClient(conn, host)
 	if err != nil {
 		log.Println("[MAIL]: No mail client can be created \t\t -> Error: " + err.Error())
+		return
 	}
 
 	// Auth
 	if err = c.Auth(auth); err != nil {
 		log.Println("[MAIL]: Authentication failed \t\t -> Error: " + err.Error())
+		return
 	}
 
 	// To && From
 	if err = c.Mail(from.Address); err != nil {
 		log.Println("[MAIL]: Create Mail Failed \t\t -> Error: " + err.Error())
+		return
 	}
 
 	if err = c.Rcpt(to.Address); err != nil {
 		log.Println("[MAIL]: RCPT request failed \t\t -> Error: " + err.Error())
+		return
 	}
 
 	// Data
 	w, err := c.Data()
 	if err != nil {
 		log.Println("[MAIL]: Writing content to the mail failed \t\t -> Error: " + err.Error())
+		return
 	}
 
 	_, err = w.Write([]byte(message))
 	if err != nil {
 		log.Println("[MAIL]: Body writing in the mail failed \t\t -> Error: " + err.Error())
+		return
 	}
 
 	err = w.Close()
 	if err != nil {
 		log.Println("[MAIL]: Close mail failed \t\t -> Error: " + err.Error())
+		return
 	}
 
 	c.Quit()

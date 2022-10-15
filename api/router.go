@@ -23,6 +23,7 @@ func Router() {
 
 	r := gin.Default()
 	docs.SwaggerInfo.BasePath = "/api/v1"
+	r.Use(CORSMiddleware())
 	v1 := r.Group("/api/v1")
 	{
 		v1.POST("/email", auth, SendMail)
@@ -127,6 +128,12 @@ func Register(c *gin.Context) {
 		return
 	}
 
+	err := helpers.CheckRegisterAttribute(senderRequest)
+	if err != nil {
+		log.Println("[REGISTER]: At least one attribute is empty \t\t -> Error: " + err.Error())
+		c.AbortWithStatus(http.StatusInternalServerError)
+	}
+
 	token, err := helpers.GenerateRandomStringURLSafe(128)
 	if err != nil {
 		log.Println("[REGISTER]: Error while generating a token \t\t -> Error: " + err.Error())
@@ -142,4 +149,21 @@ func Register(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, sender)
+}
+
+func CORSMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Content-Type", "application/json")
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization, X-Max, x-api-key")
+		c.Writer.Header().Set("Access-Control-Request-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization, X-Max")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, UPDATE")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+		c.Next()
+	}
 }
