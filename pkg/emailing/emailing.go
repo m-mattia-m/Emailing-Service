@@ -11,7 +11,7 @@ import (
 	"net/smtp"
 )
 
-func Mail(sender models.Sender, receiver models.ReceiverRequst) error {
+func Mail(sender models.Sender, receiver models.ReceiverRequst) (models.Email, error) {
 	email := models.Email{
 		FromName:    sender.Name,
 		FromEmail:   sender.Email,
@@ -31,16 +31,16 @@ func Mail(sender models.Sender, receiver models.ReceiverRequst) error {
 
 	err := helpers.CheckEmailAttribute(email)
 	if err != nil {
-		return err
+		return models.Email{}, err
 	}
 	err = helpers.CheckEmailAttribute(notificationEmail)
 	if err != nil {
-		return err
+		return models.Email{}, err
 	}
 
 	sendMail(email)
 	sendMail(notificationEmail)
-	return nil
+	return email, nil
 }
 
 func sendMail(email models.Email) {

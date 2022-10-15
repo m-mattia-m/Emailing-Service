@@ -10,6 +10,6 @@ type Email struct {
 	Host        string
 	Port        string
 	Username    string
-	Password    string
+	Password    string `json:"-"`
 	SSL         bool
 }

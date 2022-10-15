@@ -104,8 +104,12 @@ func SendMail(c *gin.Context) {
 		c.AbortWithStatus(http.StatusNotFound)
 	}
 
-	emailing.Mail(sender, receiver)
-	c.JSON(http.StatusOK, sender.SenderRequest)
+	email, err := emailing.Mail(sender, receiver)
+	if err != nil {
+		log.Println("[API-MAIL]: Mail could not be sent \t\t -> Error: " + err.Error())
+		c.AbortWithStatus(http.StatusInternalServerError)
+	}
+	c.JSON(http.StatusOK, email)
 }
 
 // Register 					godoc
