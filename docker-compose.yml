@@ -1,0 +1,25 @@
+version: '3.2'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: ${DB_NAME}-database
+    restart: always
+    ports:
+     - '${DB_PORT}:3306'
+    environment:
+      MYSQL_DATABASE: "${DB_NAME}"
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+      MYSQL_USER: "${DB_USERNAME}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+
+  app:
+    depends_on:
+     - db
+    image: phpmyadmin/phpmyadmin
+    container_name: ${DB_NAME}-phpmyadmin
+    restart: always
+    ports:
+     - '8083:80'
+    environment:
+      PMA_HOST: db

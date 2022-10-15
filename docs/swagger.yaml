@@ -1,0 +1,138 @@
+definitions:
+  models.HttpError:
+    properties:
+      message:
+        type: string
+    type: object
+  models.Receiver:
+    properties:
+      email:
+        type: string
+      keyword:
+        type: string
+      name:
+        type: string
+    type: object
+  models.Sender:
+    properties:
+      email:
+        type: string
+      keyword:
+        type: string
+      name:
+        type: string
+      notificationEmail:
+        type: string
+      smtpPassword:
+        type: string
+      smtpPort:
+        type: string
+      smtpUrl:
+        type: string
+      smtpUsername:
+        type: string
+      token:
+        type: string
+    type: object
+  models.SenderRequest:
+    properties:
+      email:
+        type: string
+      keyword:
+        type: string
+      name:
+        type: string
+      notificationEmail:
+        type: string
+      smtpPassword:
+        type: string
+      smtpPort:
+        type: string
+      smtpUrl:
+        type: string
+      smtpUsername:
+        type: string
+    type: object
+info:
+  contact:
+    email: software@upcraft.li
+    name: API Support
+  title: Emailing-Service
+  version: "1.0"
+paths:
+  /email:
+    post:
+      consumes:
+      - application/json
+      description: Send a email to the receiver.
+      parameters:
+      - description: SenderRequest
+        in: body
+        name: SenderRequest
+        required: true
+        schema:
+          $ref: '#/definitions/models.SenderRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Sender'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.HttpError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.HttpError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.HttpError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Emailing-Service
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new Application-Email
+      parameters:
+      - description: Receiver
+        in: body
+        name: Receiver
+        required: true
+        schema:
+          $ref: '#/definitions/models.Receiver'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Receiver'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.HttpError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.HttpError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.HttpError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Emailing-Service
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Access-Token
+    type: apiKey
+swagger: "2.0"

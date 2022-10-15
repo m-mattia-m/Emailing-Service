@@ -1,0 +1,217 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Emailing-Service",
+        "contact": {
+            "name": "API Support",
+            "email": "software@upcraft.li"
+        },
+        "version": "1.0"
+    },
+    "paths": {
+        "/email": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Send a email to the receiver.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Emailing-Service"
+                ],
+                "parameters": [
+                    {
+                        "description": "SenderRequest",
+                        "name": "SenderRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.SenderRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Sender"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.HttpError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.HttpError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.HttpError"
+                        }
+                    }
+                }
+            }
+        },
+        "/register": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Register a new Application-Email",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Emailing-Service"
+                ],
+                "parameters": [
+                    {
+                        "description": "Receiver",
+                        "name": "Receiver",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Receiver"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Receiver"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.HttpError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.HttpError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.HttpError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.HttpError": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Receiver": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "keyword": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Sender": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "keyword": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "notificationEmail": {
+                    "type": "string"
+                },
+                "smtpPassword": {
+                    "type": "string"
+                },
+                "smtpPort": {
+                    "type": "string"
+                },
+                "smtpUrl": {
+                    "type": "string"
+                },
+                "smtpUsername": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.SenderRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "keyword": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "notificationEmail": {
+                    "type": "string"
+                },
+                "smtpPassword": {
+                    "type": "string"
+                },
+                "smtpPort": {
+                    "type": "string"
+                },
+                "smtpUrl": {
+                    "type": "string"
+                },
+                "smtpUsername": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Access-Token",
+            "in": "header"
+        }
+    }
+}
