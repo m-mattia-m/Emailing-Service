@@ -1,0 +1,9 @@
+version: '3.2'
+
+services:
+  app:
+    image: ghcr.io/m-mattia-m/emailing-service-app:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: .docker/app/Dockerfile
+      network: host
