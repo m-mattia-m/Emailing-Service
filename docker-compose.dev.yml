@@ -3,10 +3,11 @@ version: '3.2'
 services:
   db:
     ports:
-      - '${DB_PORT}:3306'
+      - '3306:3306'
     networks:
       - local
       - public
+    restart: "no"
 
   phpmyadmin:
     depends_on:
@@ -22,8 +23,9 @@ services:
       PMA_USER: ${DB_ROOT_USERNAME}
       PMA_PASSWORD: ${DB_ROOT_PASSWORD}
     hostname: phpmyadmin
-    restart: always
+    restart: "no"
 
   app:
     ports:
       - "${PORT}:${PORT}"
+    restart: unless-stopped
