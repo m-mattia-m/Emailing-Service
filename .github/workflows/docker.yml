@@ -3,9 +3,6 @@ on:
   push:
     tags:
       - v*.*.*
-    # testing
-    branches:
-      - feature/docker-ci
 
 jobs:
   docker:
@@ -20,7 +17,7 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
+          username: ${{ github.repository_owner	}}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -29,7 +26,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         env:
-          APP_IMAGE_REPO: ghcr.io/timokluser-dev/emailing-service-app
+          APP_IMAGE_REPO: ghcr.io/${{ github.repository_owner	}}/emailing-service-app
           APP_TAG: ${{ github.ref_name }}
         with:
           # build
