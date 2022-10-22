@@ -10,6 +10,9 @@ jobs:
     permissions:
       contents: read
       packages: write
+    env:
+      APP_IMAGE_REPO: ghcr.io/${{ github.repository_owner	}}/emailing-service-app
+      APP_TAG: ${{ github.ref_name }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -19,15 +22,17 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor	}}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get Docker Meta Data
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.APP_IMAGE_REPO }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       - name: Build and push
         uses: docker/build-push-action@v3
-        env:
-          APP_IMAGE_REPO: ghcr.io/${{ github.repository_owner	}}/emailing-service-app
-          APP_TAG: ${{ github.ref_name }}
         with:
           # build
           context: .
@@ -35,4 +40,7 @@ jobs:
           network: host
           # push
           push: true
-          tags: ${{ env.APP_IMAGE_REPO }}:latest, ${{ env.APP_IMAGE_REPO }}:${{ env.APP_TAG }}
+          tags: |
+            ${{ env.APP_IMAGE_REPO }}:latest
+            ${{ env.APP_IMAGE_REPO }}:${{ env.APP_TAG }}
+          labels: ${{ steps.meta.outputs.labels }}
