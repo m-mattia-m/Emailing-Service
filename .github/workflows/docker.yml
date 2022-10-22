@@ -37,4 +37,4 @@ jobs:
           network: host
           # push
           push: true
-          tags: $APP_IMAGE_REPO:$GITHUB_REF_NAME, $APP_IMAGE_REPO:latest
+          tags: $APP_IMAGE_REPO:latest
