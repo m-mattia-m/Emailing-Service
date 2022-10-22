@@ -1,21 +1,7 @@
 version: '3.2'
 
 services:
-  db:
-    image: mysql:8.0
-    networks:
-      - local
-    environment:
-      MYSQL_DATABASE: "${DB_NAME}"
-      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
-      MYSQL_USER: "${DB_USERNAME}"
-      MYSQL_PASSWORD: "${DB_PASSWORD}"
-    hostname: db
-    restart: always
-
   app:
-    depends_on:
-      - db
     image: ghcr.io/m-mattia-m/emailing-service-app:latest
     networks:
       - local
