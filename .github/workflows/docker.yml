@@ -3,6 +3,9 @@ on:
   push:
     tags:
       - v*.*.*
+    # testing
+    branches:
+      - feature/docker-ci
 
 jobs:
   docker:
