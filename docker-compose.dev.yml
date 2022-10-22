@@ -33,6 +33,8 @@ services:
     restart: "no"
 
   app:
+    depends_on:
+      - db
     ports:
       - "${PORT}:${PORT}"
     restart: unless-stopped
