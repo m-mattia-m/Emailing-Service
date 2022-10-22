@@ -30,6 +30,7 @@ jobs:
         uses: docker/build-push-action@v3
         env:
           APP_IMAGE_REPO: timokluser-dev/emailing-service-app
+          BRANCH: ${GITHUB_REF_NAME}
         with:
           # build
           context: .
@@ -37,4 +38,4 @@ jobs:
           network: host
           # push
           push: true
-          tags: $APP_IMAGE_REPO:latest
+          tags: ${{env.APP_IMAGE_REPO}}:latest, ${{env.APP_IMAGE_REPO}}:${{env.BRANCH}}
