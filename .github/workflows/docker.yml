@@ -35,4 +35,4 @@ jobs:
           network: host
           # push
           push: true
-          tags: ghcr.io/m-mattia-m/emailing-service-app:${GITHUB_REF_NAME}, ghcr.io/m-mattia-m/emailing-service-app:latest
+          tags: m-mattia-m/emailing-service-app:${GITHUB_REF_NAME}, m-mattia-m/emailing-service-app:latest
