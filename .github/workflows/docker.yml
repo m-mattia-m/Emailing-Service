@@ -11,7 +11,7 @@ jobs:
       contents: read
       packages: write
     env:
-      APP_IMAGE_REPO: ghcr.io/${{ github.repository_owner	}}/emailing-service-app
+      APP_IMAGE_REPO: ghcr.io/${{ github.repository_owner }}/emailing-service-app
       APP_TAG: ${{ github.ref_name }}
     steps:
       - name: Checkout repository
