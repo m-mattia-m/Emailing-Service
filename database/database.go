@@ -37,7 +37,12 @@ func Client() *gorm.DB {
 	}
 	dsn := config.FormatDSN()
 
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	//db, err := gorm.Open(mysql.New(mysql.Config{Conn: conn, DisableWithReturning: true}))
+	db, err := gorm.Open(mysql.New(mysql.Config{
+		DSN:                  dsn,
+		DisableWithReturning: true,
+	}), &gorm.Config{})
+	//db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Println(dsn)
 		log.Println("[SETUP GORM]: can not open the connection to the database\t -> Error: " + err.Error())
