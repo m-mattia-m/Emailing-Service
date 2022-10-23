@@ -1,2 +1,6 @@
 .env
 dist/
+/.idea/.gitignore
+/.idea/emailing-service.iml
+/.idea/modules.xml
+/.idea/vcs.xml
