@@ -2,7 +2,7 @@ version: '3.2'
 
 services:
   db:
-    image: mysql:8.0
+    image: mariadb:10.3
     networks:
       - local
       - public
