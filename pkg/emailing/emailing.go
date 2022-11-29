@@ -9,6 +9,7 @@ import (
 	"net"
 	"net/mail"
 	"net/smtp"
+	"time"
 )
 
 func Mail(sender models.Sender, receiver models.ReceiverRequst) (models.Email, error) {
@@ -49,11 +50,28 @@ func sendMail(email models.Email) {
 	subject := email.Subject
 	body := email.Message
 
+	serverDomain := helpers.GetDomain(from.Address)
+	if serverDomain == "" {
+		log.Println("[MAIL]: can't read server-domain")
+		return
+	}
+
+	const rfc2822 = "Fri, 21 Nov 1997 09:55:06 -0600" //time.RFC822
+	const dateFormat = "2022-11-27 17:42:06 +0600"
+	currentDateString := time.Now().String()
+	date, err := time.Parse(dateFormat, currentDateString)
+	if err != nil {
+		log.Println("[MAIL]: can't convert date into the right format")
+		return
+	}
+
 	headers := make(map[string]string)
 	headers["From"] = from.String()
 	headers["To"] = to.String()
 	headers["Subject"] = subject
 	headers["Content-Type"] = email.ContentType
+	headers["Date"] = date.String()
+	headers["MIME-Version:"] = "1.0"
 
 	message := ""
 	for k, v := range headers {
